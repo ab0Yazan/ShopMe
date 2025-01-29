@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Nginx Web Server
+  nginx:
+    image: nginx:latest
+    container_name: shopme_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ../:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - mysql
+
+  # PHP-FPM Service
+  php:
+    build: ./php
+    container_name: shopme_php
+    restart: unless-stopped
+    volumes:
+      - ../:/var/www/html
+    user: "root"
+    depends_on:
+      - mysql
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: shopme_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shopme
+      MYSQL_USER: shopme_user
+      MYSQL_PASSWORD: shopme_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+
+  # Workspace with Node, NPM, PHP, Composer
+  workspace:
+    build: ./workspace
+    container_name: shopme_workspace
+    restart: unless-stopped
+    volumes:
+      - ../:/var/www/html
+    user: "root"
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    stdin_open: true
+    tty: true
+
+volumes:
+  mysql_data:
