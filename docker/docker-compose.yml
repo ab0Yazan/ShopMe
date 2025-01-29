@@ -42,6 +42,20 @@ services:
       - mysql_data:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/my.cnf
 
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: shopme_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql  
+      PMA_PORT: 3306   
+      MYSQL_ROOT_PASSWORD: root 
+    depends_on:
+      - mysql
+
   # Workspace with Node, NPM, PHP, Composer
   workspace:
     build: ./workspace
