@@ -24,6 +24,7 @@ Route::prefix('admin')->group(function () {
     Route::middleware('auth:admin-api')->group(function () {
         Route::prefix('categories')->group(function () {
             Route::post('', [CategoryController::class, 'store']);
+            Route::put('{id}', [CategoryController::class, 'update']);
         });
     });
 

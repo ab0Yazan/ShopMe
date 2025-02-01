@@ -8,11 +8,11 @@ use Domain\Category\DataTransferObjects\CategoryData;
 
 class UpsertCategoryAction
 {
-    public function execute(CategoryData $data): Category
+    public function execute(CategoryData $data, ?int$id = null): Category
     {
         return Category::updateOrCreate(
             [
-                "id" => $data->id
+                "id" => $id
             ],
             [
                 'name' => $data->name,
