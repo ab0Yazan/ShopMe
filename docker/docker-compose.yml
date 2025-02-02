@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ../:/var/www/html
+      - ../:/home/shopme/public_html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
@@ -21,8 +21,7 @@ services:
     container_name: shopme_php
     restart: unless-stopped
     volumes:
-      - ../:/var/www/html
-    user: "root"
+      - ../:/home/shopme/public_html
     depends_on:
       - mysql
 
@@ -62,9 +61,9 @@ services:
     container_name: shopme_workspace
     restart: unless-stopped
     volumes:
-      - ../:/var/www/html
-    user: "root"
-    working_dir: /var/www/html
+      - ../:/home/shopme/public_html
+    user: "1000:1000"
+    working_dir: /home/shopme/public_html
     depends_on:
       - php
     stdin_open: true
